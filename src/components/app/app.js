@@ -1,11 +1,12 @@
 import React from 'react';
+import styled from 'styled-components';
+import nextId from 'react-id-generator';
 import AppHeader from '../app-header';
 import SearchPanel from '../search-panel';
 import PostStatusFilter from '../post-status-filter';
 import PostList from '../post-list';
 import PostAddForm from '../post-add-form';
 import './app.css';
-import styled from 'styled-components';
 
 const AppBlock = styled.div`
   margin: 0 auto;
@@ -17,12 +18,26 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       data: [
-        { label: 'Going to learn React', important: true, id: 'qwer' },
-        { label: 'That is good', important: false, id: 'asdf' },
-        { label: 'I need a break...', important: false, id: 'zxcv' },
+        {
+          label: 'Going to learn React',
+          important: true,
+          like: false,
+          id: nextId(),
+        },
+        {
+          label: 'That is good...',
+          important: false,
+          like: false,
+          id: nextId(),
+        },
+        {
+          label: 'I need a break...',
+          important: false,
+          like: false,
+          id: nextId(),
+        },
       ],
     };
-    this.maxId = 4;
   }
 
   deleteItem = (id) => {
@@ -39,13 +54,20 @@ export default class App extends React.Component {
       const newItem = {
         label: body,
         import: false,
-        id: this.maxId++,
+        id: nextId(),
       };
 
       const newArr = [...data, newItem];
 
       return { data: newArr };
     });
+  };
+
+  onToggleLiked = (id) => {
+    console.log(`Like ${id}`);
+  };
+  onToggleImportant = (id) => {
+    console.log(`Important ${id}`);
   };
 
   render() {
@@ -56,7 +78,12 @@ export default class App extends React.Component {
           <SearchPanel />
           <PostStatusFilter />
         </div>
-        <PostList posts={this.state.data} onDelete={this.deleteItem} />
+        <PostList
+          posts={this.state.data}
+          onDelete={this.deleteItem}
+          onToggleLiked={this.onToggleLiked}
+          onToggleImportant={this.onToggleImportant}
+        />
         <PostAddForm onAdd={this.addItem} />
       </AppBlock>
     );
